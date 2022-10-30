@@ -18,6 +18,24 @@ function App() {
     const name = form.name.value;
     const email = form.email.value;
     console.log(name, email);
+    const user = { name, email };
+
+    fetch(`${server}/users`, {
+      method: "post",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+      .then(res => res.json())
+      .then(data => {
+        const newUsers = [...users, data];
+        setUsers(newUsers);
+        console.log(data);
+      })
+      .catch(err => console.error(err));
+
+    form.reset();
   };
 
   return (
@@ -53,7 +71,7 @@ function App() {
           <h2>Total users: {users.length}</h2>
           <div className="flex flex-col gap-4">
             {users.map(user => (
-              <div key={user.id}>
+              <div key={user._id}>
                 <h3 className="">{user.name}</h3>
                 <p className="">{user.email}</p>
               </div>
